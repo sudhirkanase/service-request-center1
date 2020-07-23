@@ -1,27 +1,20 @@
 package com.wellsfargo.serv_req_center.task_management.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wellsfargo.serv_req_center.task_management.beans.ServiceRequestTask;
 
@@ -35,7 +28,7 @@ public class TaskManagementController {
 	private static String UPLOAD_FOLDER = "G://SynechronTest//";
 
 	@GetMapping("/getServiceReqTasks")
-	public @ResponseBody ResponseEntity<List<ServiceRequestTask>> getServiceReqTasks() {
+	public ResponseEntity<List<ServiceRequestTask>> getServiceReqTasks() {
 		// List<ServiceRequestTask> tasks = null;
 		if (tasks == null) {
 			tasks = loadTasks();
@@ -61,7 +54,7 @@ public class TaskManagementController {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			jsonTasks = mapper.readValue(
-					new File(TaskManagementController.class.getResource("/data/task-list.json").getFile()),
+					getClass().getResource("/data/task-list.json"),
 					new TypeReference<List<ServiceRequestTask>>() {
 					});
 
