@@ -21,10 +21,11 @@ public class AccountController {
 	
 	
 	@GetMapping("/searchAccounts")
-	public @ResponseBody ResponseEntity<List<Account>> searchAccounts() {
+	public @ResponseBody ResponseEntity<List<Account>> searchAccounts(@PathVariable("accountNumber") String accountNumber,@PathVariable("accountName") String accountName) {
 		 List<Account> accounts = null;
 		if (accounts == null) {
 			accounts = loadAccounts();
+			Optional<Account> filteredAccount=accounts.stream().filter(accnt->accnt.getAccountName().startsWith(accountName)).findFirst();
 		}
 		return ResponseEntity.ok(accounts);
 	}
@@ -50,7 +51,7 @@ public class AccountController {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			jsonAccounts = mapper.readValue(
-					new File(TaskManagementController.class.getResource("/data/account-list.json").getFile()),
+					getClass().getResource("/data/account-list.json"),
 					new TypeReference<List<Account>>() {
 					});
 

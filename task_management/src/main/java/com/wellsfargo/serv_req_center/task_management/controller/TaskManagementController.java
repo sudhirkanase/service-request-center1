@@ -61,7 +61,7 @@ public class TaskManagementController {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			jsonTasks = mapper.readValue(
-					new File(TaskManagementController.class.getResource("/data/task-list.json").getFile()),
+					getClass().getResource("/data/task-list.json"),
 					new TypeReference<List<ServiceRequestTask>>() {
 					});
 
