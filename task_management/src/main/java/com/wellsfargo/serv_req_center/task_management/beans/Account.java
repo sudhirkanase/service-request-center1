@@ -28,6 +28,7 @@ public class Account implements Serializable {
 	private Integer backupInvestmentManagerCode;
 	private String bankCapacity;
 	private String controlGroup;
+	private String accountShortName;
 	
 	
 	public Integer getAccountNumber() {
@@ -151,7 +152,12 @@ public class Account implements Serializable {
 	public void setControlGroup(String controlGroup) {
 		this.controlGroup = controlGroup;
 	}
-	
+	public String getAccountShortName() {
+		return accountShortName;
+	}
+	public void setAccountShortName(String accountShortName) {
+		this.accountShortName = accountShortName;
+	}
 	
 
 }

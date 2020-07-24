@@ -1,0 +1,17 @@
+{
+	"id": 100112,
+	"status": "Closed",
+	"phone": "+(844) 235678",
+	"createdDate": "17/07/2020",
+	"email": "test@wellsfargo.com",
+	"assignedUserGroup": "Update User Group",
+	"assignedEmail": "test-assign@wellsfargo.com",
+	"accountService": "Test Service",
+	"accountDetail": {
+		"accountShortName": "Test name",
+		"mainAccountNumber": 3410019,
+		"marketValue": 10000,
+		"branchCode": 750121,
+		"accountNumber": 11231100
+	}
+}
