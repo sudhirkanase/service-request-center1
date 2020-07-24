@@ -2,6 +2,7 @@ package com.wellsfargo.serv_req_center.task_management.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wellsfargo.serv_req_center.task_management.beans.Account;
 import com.wellsfargo.serv_req_center.task_management.beans.ContactCenterDetail;
 import com.wellsfargo.serv_req_center.task_management.beans.ServiceRequestTask;
 
@@ -34,18 +36,18 @@ public class ContactCenterController {
 	}
 
 	private ContactCenterDetail loadContactDetail(ServiceRequestTask contactDetail) {
-		ContactCenterDetail jsonTasks = null;
+		ContactCenterDetail jsonDetails = null;
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 
 			if (contactDetail.getId() == 0) {
-				jsonTasks = mapper.readValue(
-						new File(ContactCenterController.class.getResource("/data/add-contact-center.json").getFile()),
+				jsonDetails = mapper.readValue(
+						getClass().getResource("/data/add-contact-center.json"),
 						new TypeReference<ContactCenterDetail>() {
 						});
 			} else {
-				jsonTasks = mapper.readValue(
-						new File(ContactCenterController.class.getResource("/data/contact-center.json").getFile()),
+				jsonDetails = mapper.readValue(
+						getClass().getResource("/data/contact-center.json"),
 						new TypeReference<ContactCenterDetail>() {
 						});
 			}
@@ -54,6 +56,6 @@ public class ContactCenterController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return jsonTasks;
+		return jsonDetails;
 	}
 }
