@@ -1,0 +1,46 @@
+{
+	"id": 100110,
+	"status": "Open",
+	"phone": "+(844) 235678",
+	"createdDate": "24/07/2020",
+	"email": "test@wellsfargo.com",
+	"assignedUserGroup": "Add User Group",
+	"assignedEmail": "test-assign@wellsfargo.com",
+	"accountService": "Test Service",
+	"accountDetail": {
+		"accountShortName": "Test name",
+		"mainAccountNumber": 3410019,
+		"marketValue": 10000,
+		"branchCode": 750121,
+		"accountNumber": 1123119
+	},
+	"documents": [
+		{
+			"documentName": "Document-1.pdf",
+			"dueDate": "25/10/2020",
+			"added": "yes",
+			"notes": "PDF file",
+			"additionalInst": "read",
+			"attachment": "yes",
+			"documentAction": "read mode"
+		},
+		{
+			"documentName": "Document-2.pdf",
+			"dueDate": "02/12/2020",
+			"added": "yes",
+			"notes": "Excel file",
+			"additionalInst": "write",
+			"attachment": "yes",
+			"documentAction": "read/write mode"
+		}
+	],
+	"callerName": "Test",
+	"callerPhone": "+(944) 741101",
+	"action": "Action Test",
+	"callCode": 100,
+	"taxpayerId": "yes",
+	"fullyAuthenticated": "no",
+	"taskPriority": "high",
+	"taskNotes": "Test Task Notes",
+	"callDetails": "Test edit details"
+}
