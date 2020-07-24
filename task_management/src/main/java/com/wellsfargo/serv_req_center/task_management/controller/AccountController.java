@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wellsfargo.serv_req_center.task_management.beans.Account;
+import com.wellsfargo.serv_req_center.task_management.commons.DataNotFoundException;
 
 
 @RestController
@@ -27,6 +28,9 @@ public class AccountController {
 			accounts = loadAccounts();
 			filteredAccounts=accounts.stream().filter(accnt->String.valueOf(accnt.getAccountNumber()).startsWith(accountNumber) || accnt.getAccountName().startsWith(accountName)).collect(Collectors.toList());
 			
+		}
+		if(filteredAccounts.isEmpty()) {
+			throw new DataNotFoundException("Accounts not found");
 		}
 		return ResponseEntity.ok(filteredAccounts);
 	}
