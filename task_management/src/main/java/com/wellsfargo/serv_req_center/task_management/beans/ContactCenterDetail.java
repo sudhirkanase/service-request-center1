@@ -15,6 +15,7 @@ public class ContactCenterDetail extends ServiceRequestTask implements Serializa
 	private String callCode;
 	private String action;
 	private String fullyAuthenticated;
+	private String isTaxpayerId;
 	private String taxpayerId;
 	private String taskPriority;
 	private String taskNotes;
@@ -74,6 +75,11 @@ public class ContactCenterDetail extends ServiceRequestTask implements Serializa
 	public void setCallDetails(String callDetails) {
 		this.callDetails = callDetails;
 	}
-	
-	
+	public String getIsTaxpayerId() {
+		return isTaxpayerId;
+	}
+	public void setIsTaxpayerId(String isTaxpayerId) {
+		this.isTaxpayerId = isTaxpayerId;
+	}
+
 }
