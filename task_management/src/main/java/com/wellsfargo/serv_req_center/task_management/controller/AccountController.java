@@ -5,28 +5,39 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wellsfargo.serv_req_center.task_management.beans.Account;
+import com.wellsfargo.serv_req_center.task_management.beans.AccountType;
 import com.wellsfargo.serv_req_center.task_management.commons.DataNotFoundException;
+import com.wellsfargo.serv_req_center.task_management.commons.LoggingAdvice;
+import com.wellsfargo.serv_req_center.task_management.commons.SRCAException;
 
 
 @RestController
 public class AccountController {
 	
-	
-	@GetMapping("/searchAccounts/{accountNumber}/{accountName}")
-	public ResponseEntity<List<Account>> searchAccounts(@PathVariable("accountNumber") String accountNumber,@PathVariable("accountName") String accountName) {
+	@PostMapping("/searchAccounts")
+	public ResponseEntity<List<Account>> searchAccounts(@RequestBody AccountType account) {
+		
+		if(account.getAccountNumber() == null && account.getAccountName() == null) {
+			throw new SRCAException("Either accountNumber or accountName is required");
+		}
 		 List<Account> accounts = null;
 		 List<Account> filteredAccounts = null;
+		 
 		if (accounts == null) {
 			accounts = loadAccounts();
-			filteredAccounts=accounts.stream().filter(accnt->String.valueOf(accnt.getAccountNumber()).startsWith(accountNumber) || accnt.getAccountName().startsWith(accountName)).collect(Collectors.toList());
+			filteredAccounts=accounts.stream().filter(accnt->String.valueOf(accnt.getAccountNumber()).startsWith(String.valueOf(account.getAccountNumber())) || accnt.getAccountName().startsWith(account.getAccountName())).collect(Collectors.toList());
 			
 		}
 		if(filteredAccounts.isEmpty()) {
