@@ -13,5 +13,11 @@ public class SrcaExceptionHandler {
 		ErrorDetails error = new ErrorDetails("NOT_FOUND_ERROR", e.getMessage());
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(value = SRCAException.class)
+	public ResponseEntity<ErrorDetails> handleSRCAException(SRCAException e) {
+		ErrorDetails error = new ErrorDetails("FIELD_REQUIRED_ERROR", e.getMessage());
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+	}
 
 }

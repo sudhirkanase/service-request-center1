@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wellsfargo.serv_req_center.task_management.beans.Account;
+import com.wellsfargo.serv_req_center.task_management.beans.AccountType;
 import com.wellsfargo.serv_req_center.task_management.commons.DataNotFoundException;
+import com.wellsfargo.serv_req_center.task_management.commons.SRCAException;
 
 @Service
 public class AccountService {
@@ -20,16 +20,25 @@ public class AccountService {
 	// temp at account level
 	List<Account> accounts = null;
 
-	public List<Account> searchAccounts(String accountNumber, String accountName) {
+	public List<Account> searchAccounts(AccountType account) {
 		// List<Account> accounts = null;
 		List<Account> filteredAccounts = null;
+		if(account.getAccountNumber() == null && account.getAccountName() == null) {
+			throw new SRCAException("Either accountNumber or accountName is required");
+		}
 		if (accounts == null) {
 			accounts = loadAccounts();
 		}
+		if(account.getAccountNumber() != null && account.getAccountName() != null) {
 		filteredAccounts = accounts.stream()
-				.filter(accnt -> String.valueOf(accnt.getAccountNumber()).startsWith(accountNumber)
-						|| accnt.getAccountName().startsWith(accountName))
+				.filter(accnt -> String.valueOf(accnt.getAccountNumber()).startsWith(String.valueOf(account.getAccountNumber()))
+						|| accnt.getAccountName().startsWith(account.getAccountName()))
 				.collect(Collectors.toList());
+		}else if(account.getAccountNumber() != null){
+			filteredAccounts=accounts.stream().filter(accnt->String.valueOf(accnt.getAccountNumber()).startsWith(String.valueOf(account.getAccountNumber()))).collect(Collectors.toList());
+		}else if(account.getAccountName() != null) {
+			filteredAccounts=accounts.stream().filter(accnt-> accnt.getAccountName().startsWith(account.getAccountName())).collect(Collectors.toList());
+		}
 		if (filteredAccounts.isEmpty()) {
 			throw new DataNotFoundException("Accounts not found");
 		}
