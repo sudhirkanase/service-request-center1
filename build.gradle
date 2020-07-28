@@ -25,6 +25,7 @@
  
  allprojects{
  	apply plugin: 'java'
+	apply plugin: 'eclipse'
  	
  	sourceCompatibility = "${source_compatibility_version}"
  
