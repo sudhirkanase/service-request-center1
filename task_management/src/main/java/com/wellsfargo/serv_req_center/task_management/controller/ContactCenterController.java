@@ -26,17 +26,45 @@ import com.wellsfargo.serv_req_center.task_management.service.TaskManagementServ
  */
 @RestController
 public class ContactCenterController {
-	
+
 	@Autowired
 	private TaskManagementService taskManagementService;
 
 	@PostMapping("/contactCenterDetail")
 	public @ResponseBody ResponseEntity<ContactCenterDetail> getContactDetail(
 			@RequestBody ServiceRequestTask requestBody) {
+		ContactCenterDetail contactDetail = null;
+		contactDetail = taskManagementService.loadContactDetail(requestBody.getId());
+		return ResponseEntity.ok(contactDetail);
+	}
+
+	@PostMapping("/createNewTask")
+	public @ResponseBody ResponseEntity<ContactCenterDetail> createNewTask(@RequestBody Integer acctNumber,
+			String taskType) {
+
+		if (acctNumber == null || acctNumber < 0) {
+			// throw exception
+		}
 
 		ContactCenterDetail contactDetail = null;
 		if (contactDetail == null) {
-			contactDetail = taskManagementService.loadContactDetail(requestBody);
+			contactDetail = taskManagementService.createNewTask(acctNumber);
+		}
+		return ResponseEntity.ok(contactDetail);
+	}
+
+	@PostMapping("/saveTask")
+	public @ResponseBody ResponseEntity<ContactCenterDetail> saveTask(@RequestBody ContactCenterDetail details,
+			String taskType) {
+
+		// validation will come here
+		/*
+		 * if( acctNumber== null || acctNumber < 0) { // throw exception }
+		 */
+
+		ContactCenterDetail contactDetail = null;
+		if (contactDetail == null) {
+			contactDetail = taskManagementService.saveTask(details);
 		}
 		return ResponseEntity.ok(contactDetail);
 	}
