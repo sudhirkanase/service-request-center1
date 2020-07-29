@@ -1,26 +1,32 @@
 package com.wellsfargo.serv_req_center.task_management.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-import java.util.OptionalLong;
-import java.util.function.Predicate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wellsfargo.serv_req_center.auth.cache.LoggedInUserInfoCache;
 import com.wellsfargo.serv_req_center.task_management.beans.ContactCenterDetail;
 import com.wellsfargo.serv_req_center.task_management.beans.ServiceRequestTask;
 
 @Service
 public class TaskManagementService {
 
-	
 	@Autowired
 	AccountService accService;
-	
+
+	@Autowired
+	LoggedInUserInfoCache userCahce;
+
 	// for time being at class level
 	List<ServiceRequestTask> tasks = null;
 
@@ -32,60 +38,43 @@ public class TaskManagementService {
 		return tasks;
 	}
 
-	public ContactCenterDetail loadContactDetail(long id) {
-		
-		//long id = requestContactDetail.getId();		
-		Predicate<ServiceRequestTask> checkAccountPredicate = i -> (i.getId() == id && i.getTaskType() == "Contact Center");  
-		Optional<ServiceRequestTask> findFirst = tasks.stream().filter((i) ->checkAccountPredicate.test(i)).findFirst();
-		return (ContactCenterDetail) findFirst.orElse(null);
-		/*
-		 * ContactCenterDetail jsonDetails = null; try { ObjectMapper mapper = new
-		 * ObjectMapper();
-		 * 
-		 * jsonDetails =
-		 * mapper.readValue(getClass().getResource("/data/contact-center.json"), new
-		 * TypeReference<ContactCenterDetail>() { }); if
-		 * (requestContactDetail.getAccountNo().equals("11231100")) {
-		 * jsonDetails.getAccountDetail().setAccountNumber(11231100);
-		 * jsonDetails.getAccountDetail().setAccountShortName("Test 01");
-		 * jsonDetails.getAccountDetail().setMainAccountNumber(3411230);
-		 * jsonDetails.getAccountDetail().setMarketValue(371572);
-		 * jsonDetails.getAccountDetail().setBranchCode(197); } else if
-		 * (requestContactDetail.getAccountNo().equals("11233300")) {
-		 * jsonDetails.getAccountDetail().setAccountNumber(11233300);
-		 * jsonDetails.getAccountDetail().setAccountShortName("Test 02");
-		 * jsonDetails.getAccountDetail().setMainAccountNumber(351001);
-		 * jsonDetails.getAccountDetail().setMarketValue(112566);
-		 * jsonDetails.getAccountDetail().setBranchCode(231); } else if
-		 * (requestContactDetail.getAccountNo().equals("112351")) {
-		 * jsonDetails.getAccountDetail().setAccountNumber(112351);
-		 * jsonDetails.getAccountDetail().setAccountShortName("Test 03");
-		 * jsonDetails.getAccountDetail().setMainAccountNumber(980011);
-		 * jsonDetails.getAccountDetail().setMarketValue(54512);
-		 * jsonDetails.getAccountDetail().setBranchCode(155); } else if
-		 * (requestContactDetail.getAccountNo().equals("11235300")) {
-		 * jsonDetails.getAccountDetail().setAccountNumber(11235300);
-		 * jsonDetails.getAccountDetail().setAccountShortName("Test 04");
-		 * jsonDetails.getAccountDetail().setMainAccountNumber(845119);
-		 * jsonDetails.getAccountDetail().setMarketValue(255633);
-		 * jsonDetails.getAccountDetail().setBranchCode(197); } else if
-		 * (requestContactDetail.getAccountNo().equals("11235400")) {
-		 * jsonDetails.getAccountDetail().setAccountNumber(11235400);
-		 * jsonDetails.getAccountDetail().setAccountShortName("Test 05");
-		 * jsonDetails.getAccountDetail().setMainAccountNumber(7510012);
-		 * jsonDetails.getAccountDetail().setMarketValue(152281);
-		 * jsonDetails.getAccountDetail().setBranchCode(231); }
-		 * 
-		 * if (requestContactDetail.getId() == 0) { jsonDetails.setDocuments(null);
-		 * jsonDetails.setCallerName(null); jsonDetails.setCallCode(null);
-		 * jsonDetails.setCallDetails(null); jsonDetails.setCallerPhone(null);
-		 * jsonDetails.setAction(null); jsonDetails.setFullyAuthenticated(null);
-		 * jsonDetails.setIsTaxpayerId(null); jsonDetails.setTaxpayerId(null);
-		 * jsonDetails.setTaskNotes(null); jsonDetails.setTaskPriority(null); }
-		 * 
-		 * } catch (IOException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); } return jsonDetails;
-		 */}
+	public ContactCenterDetail loadContactDetail(Integer acctNumber, long id) {
+
+		ContactCenterDetail contactDetails = new ContactCenterDetail();
+		contactDetails = loadContactJsonData();
+
+		// Get task data from task list
+		ServiceRequestTask taskDetail = tasks.stream().filter(taskList -> taskList.getId() == id).findAny()
+				.orElse(null);
+		// Set task data in contact detail
+		contactDetails.setId(taskDetail.getId());
+		contactDetails.setStatus(taskDetail.getStatus());
+		contactDetails.setEmail(taskDetail.getEmail());
+		contactDetails.setAssignedEmail(taskDetail.getAssignedEmail());
+		contactDetails.setPhone(taskDetail.getPhone());
+		contactDetails.setAccountService(taskDetail.getAccountService());
+		contactDetails.setCreatedDate(taskDetail.getCreatedDate());
+		contactDetails.setAssignedUserGroup(taskDetail.getAssignedUserGroup());
+		// Set account data to contact Detail
+		contactDetails.setAccountDetail(accService.getAccount(acctNumber));
+		return contactDetails;
+	}
+
+	// To get the Task Detail data from json
+	private ContactCenterDetail loadContactJsonData() {
+		ContactCenterDetail jsonData = null;
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			jsonData = mapper.readValue(getClass().getResource("/data/contact-center.json"),
+					new TypeReference<ContactCenterDetail>() {
+					});
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jsonData;
+	}
 
 	private List<ServiceRequestTask> loadTasks() {
 		List<ServiceRequestTask> jsonTasks = null;
@@ -102,27 +91,60 @@ public class TaskManagementService {
 		return jsonTasks;
 	}
 
-	public ContactCenterDetail createNewTask(Integer acctNumber) {		
+	public ContactCenterDetail createNewTask(Integer acctNumber) {
 		ContactCenterDetail details = new ContactCenterDetail();
 		details.setAccountDetail(accService.getAccount(acctNumber));
-		
-		
-		OptionalLong nextTaskId = tasks.stream().mapToLong(p-> p.getId()).max();
-		details.setId(nextTaskId.orElse(1)); // take max id from taskList
-		
+
+		// To get max taskId and add +1 to it
+		ServiceRequestTask src = Collections.max(tasks, Comparator.comparing(s -> s.getId()));
+		details.setId(src.getId() + 1);
+
 		// Set user details
-		
-		// Task type
-		
+		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (userDetails instanceof UserDetails) {
+			details.setAccountService(((UserDetails) userDetails).getUsername());
+			details.setEmail(((UserDetails) userDetails).getUsername() + "@Wellsfargo.com");
+			details.setAssignedEmail(((UserDetails) userDetails).getUsername() + "-assigned@Wellsfargo.com");
+			details.setAccountService(((UserDetails) userDetails).getUsername());
+			details.setAssignedUserGroup(((UserDetails) userDetails).getUsername() + " group");
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			LocalDateTime now = LocalDateTime.now();
+			details.setCreatedDate((String) dtf.format(now));
+			details.setStatus("Open");
+			details.setPhone("(888) 479-7699");
+		}
+
 		return details;
 	}
 
-	public ContactCenterDetail saveTask(ServiceRequestTask details) {
+	public String saveTask(ContactCenterDetail details) {
 		
-		 // if already exists then replace with new one
-		 tasks.add(details);
-		 return (ContactCenterDetail) details;
+		ServiceRequestTask taskDetail = tasks.stream().
+				filter(taskList -> taskList.getId() == details.getId()).findAny()
+				.orElse(null);
+		
+		details.setDueDate("20/08/20");
+		details.setTaskSpecific("Online");
+		details.setWorkflowStep("Contact Center Entity");
+		details.setAccountNo(details.getAccountDetail().getAccountNumber());
+		details.setAccountName(details.getAccountDetail().getAccountName());
+
+		//Set user details for requester
+		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (userDetails instanceof UserDetails) {
+			details.setRequesterName(((UserDetails) userDetails).getUsername());
+		}
+		
+		//if already exists then update the data
+		if(taskDetail == null) {
+			tasks.add(details);
+		} else {
+			tasks.set(tasks.indexOf(taskDetail), details);
+		}
+		
+		
+		return "success";
 	}
 
-	
 }

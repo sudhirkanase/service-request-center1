@@ -16,7 +16,7 @@ public class ServiceRequestTask implements Serializable {
 	private String taskType;
 	private String taskSpecific;
 	private String workflowStep;
-	private String accountNo;
+	private Integer accountNo;
 	private String accountName;
 	private String requesterName;
 	private String dueDate;
@@ -34,7 +34,7 @@ public class ServiceRequestTask implements Serializable {
 
 	}
 
-	public ServiceRequestTask(long id, String taskType, String taskSpecific, String workflowStep, String accountNo,
+	public ServiceRequestTask(long id, String taskType, String taskSpecific, String workflowStep, Integer accountNo,
 			String accountName, String requesterName, String dueDate, String status, String phone, String createdDate,
 			Account accountDetail, String email, String assignedUserGroup, String assignedEmail, String accountService,
 			List<Document> documents) {
@@ -90,11 +90,11 @@ public class ServiceRequestTask implements Serializable {
 		this.workflowStep = workflowStep;
 	}
 
-	public String getAccountNo() {
+	public Integer getAccountNo() {
 		return accountNo;
 	}
 
-	public void setAccountNo(String accountNo) {
+	public void setAccountNo(Integer accountNo) {
 		this.accountNo = accountNo;
 	}
 
