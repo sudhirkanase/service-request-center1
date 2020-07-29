@@ -20,6 +20,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	
+	compile 'org.springframework.boot:spring-boot-starter-security'
+	
 	implementation project(":authentication_service")
 	
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
