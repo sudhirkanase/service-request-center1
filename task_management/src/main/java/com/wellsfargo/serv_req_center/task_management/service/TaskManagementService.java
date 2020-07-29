@@ -29,6 +29,7 @@ public class TaskManagementService {
 
 	// for time being at class level
 	List<ServiceRequestTask> tasks = null;
+	ContactCenterDetail contactDetails = new ContactCenterDetail();
 
 	public List<ServiceRequestTask> getServiceReqTasks() {
 		// List<ServiceRequestTask> tasks = null;
@@ -39,9 +40,6 @@ public class TaskManagementService {
 	}
 
 	public ContactCenterDetail loadContactDetail(Integer acctNumber, long id) {
-
-		ContactCenterDetail contactDetails = new ContactCenterDetail();
-		contactDetails = loadContactJsonData();
 
 		// Get task data from task list
 		ServiceRequestTask taskDetail = tasks.stream().filter(taskList -> taskList.getId() == id).findAny()
@@ -58,22 +56,6 @@ public class TaskManagementService {
 		// Set account data to contact Detail
 		contactDetails.setAccountDetail(accService.getAccount(acctNumber));
 		return contactDetails;
-	}
-
-	// To get the Task Detail data from json
-	private ContactCenterDetail loadContactJsonData() {
-		ContactCenterDetail jsonData = null;
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			jsonData = mapper.readValue(getClass().getResource("/data/contact-center.json"),
-					new TypeReference<ContactCenterDetail>() {
-					});
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return jsonData;
 	}
 
 	private List<ServiceRequestTask> loadTasks() {
@@ -118,7 +100,7 @@ public class TaskManagementService {
 		return details;
 	}
 
-	public String saveTask(ContactCenterDetail details) {
+	public ContactCenterDetail saveTask(ContactCenterDetail details) {
 		
 		ServiceRequestTask taskDetail = tasks.stream().
 				filter(taskList -> taskList.getId() == details.getId()).findAny()
@@ -143,8 +125,9 @@ public class TaskManagementService {
 			tasks.set(tasks.indexOf(taskDetail), details);
 		}
 		
+		contactDetails = details;
 		
-		return "success";
+		return (ContactCenterDetail)details;
 	}
 
 }
