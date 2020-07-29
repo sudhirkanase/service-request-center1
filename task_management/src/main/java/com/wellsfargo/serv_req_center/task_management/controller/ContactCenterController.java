@@ -46,9 +46,9 @@ public class ContactCenterController {
 	}
 
 	@PostMapping("/saveTask")
-	public @ResponseBody ResponseEntity<String> saveTask(@RequestBody ContactCenterDetail details) {
+	public @ResponseBody ResponseEntity<ContactCenterDetail> saveTask(@RequestBody ContactCenterDetail details) {
 
-		String contactDetail = null;
+		ContactCenterDetail contactDetail = null;
 		if (contactDetail == null) {
 			contactDetail = taskManagementService.saveTask(details);
 		}
