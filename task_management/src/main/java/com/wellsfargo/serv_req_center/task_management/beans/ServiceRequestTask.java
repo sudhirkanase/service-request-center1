@@ -1,7 +1,6 @@
 package com.wellsfargo.serv_req_center.task_management.beans;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +28,9 @@ public class ServiceRequestTask implements Serializable {
 	private String assignedEmail;
 	private String accountService;
 	private List<Document> documents;
+	private String taskCompleted;
+	private String selectedIndividual;
+	private String assignTo;
 
 	public ServiceRequestTask() {
 
@@ -37,7 +39,7 @@ public class ServiceRequestTask implements Serializable {
 	public ServiceRequestTask(long id, String taskType, String taskSpecific, String workflowStep, Integer accountNo,
 			String accountName, String requesterName, String dueDate, String status, String phone, String createdDate,
 			Account accountDetail, String email, String assignedUserGroup, String assignedEmail, String accountService,
-			List<Document> documents) {
+			List<Document> documents, String taskCompleted, String assignTo, String selectedIndividual) {
 		super();
 		this.id = id;
 		this.taskType = taskType;
@@ -56,6 +58,9 @@ public class ServiceRequestTask implements Serializable {
 		this.assignedEmail = assignedEmail;
 		this.accountService = accountService;
 		this.documents = documents;
+		this.taskCompleted = taskCompleted;
+		this.assignTo = assignTo;
+		this.selectedIndividual = selectedIndividual;
 	}
 
 	public long getId() {
@@ -194,4 +199,28 @@ public class ServiceRequestTask implements Serializable {
 		this.documents = documents;
 	}
 
+	public String getTaskCompleted() {
+		return taskCompleted;
+	}
+
+	public void setTaskCompleted(String taskCompleted) {
+		this.taskCompleted = taskCompleted;
+	}
+
+	public String getSelectedIndividual() {
+		return selectedIndividual;
+	}
+
+	public void setSelectedIndividual(String selectedIndividual) {
+		this.selectedIndividual = selectedIndividual;
+	}
+
+	public String getAssignTo() {
+		return assignTo;
+	}
+
+	public void setAssignTo(String assignTo) {
+		this.assignTo = assignTo;
+	}
+	
 }
