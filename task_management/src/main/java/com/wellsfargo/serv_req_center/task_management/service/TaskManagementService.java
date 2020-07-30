@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -100,33 +101,39 @@ public class TaskManagementService {
 	}
 
 	public ContactCenterDetail saveTask(ContactCenterDetail details) {
-		
-		ServiceRequestTask taskDetail = tasks.stream().
-				filter(taskList -> taskList.getId() == details.getId()).findAny()
+
+		ServiceRequestTask taskDetail = tasks.stream().filter(taskList -> taskList.getId() == details.getId()).findAny()
 				.orElse(null);
-		
+
 		details.setDueDate("20/08/20");
 		details.setTaskSpecific("Online");
 		details.setWorkflowStep("Contact Center Entity");
 		details.setAccountNo(details.getAccountDetail().getAccountNumber());
 		details.setAccountName(details.getAccountDetail().getAccountName());
 
-		//Set user details for requester
+		// Set user details for requester
 		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (userDetails instanceof UserDetails) {
 			details.setRequesterName(((UserDetails) userDetails).getUsername());
 		}
-		
-		//if already exists then update the data
-		if(taskDetail == null) {
+
+		// if already exists then update the data
+		if (taskDetail == null) {
 			tasks.add(details);
 		} else {
 			tasks.set(tasks.indexOf(taskDetail), details);
 		}
-		
+
 		contactDetails = details;
-		
-		return (ContactCenterDetail)details;
+
+		return (ContactCenterDetail) details;
+	}
+
+	public List<ServiceRequestTask> getTaskList(Integer accountNo) {
+		List<ServiceRequestTask> taskList = 
+				tasks.stream().
+				filter(task -> task.getAccountNo().equals(accountNo)).collect(Collectors.toList());
+		return taskList;
 	}
 
 }
