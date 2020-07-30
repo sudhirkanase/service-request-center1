@@ -14,7 +14,7 @@ public class LoggedInUserInfoCache {
 	private Cache<String, User> userCache;
 
 	public LoggedInUserInfoCache() {
-		this.userCache = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
+		this.userCache = CacheBuilder.newBuilder().expireAfterAccess(15, TimeUnit.MINUTES).build();
 	}
 
 	public void put(String key, User user) {

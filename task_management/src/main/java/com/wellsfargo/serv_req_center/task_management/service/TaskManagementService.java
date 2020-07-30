@@ -89,7 +89,6 @@ public class TaskManagementService {
 			details.setEmail(((UserDetails) userDetails).getUsername() + "@Wellsfargo.com");
 			details.setAssignedEmail(((UserDetails) userDetails).getUsername() + "-assigned@Wellsfargo.com");
 			details.setAccountService(((UserDetails) userDetails).getUsername());
-			details.setAssignedUserGroup(((UserDetails) userDetails).getUsername() + " group");
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			LocalDateTime now = LocalDateTime.now();
 			details.setCreatedDate((String) dtf.format(now));
