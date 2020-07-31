@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import com.wellsfargo.serv_req_center.task_management.beans.Document;
-import com.wellsfargo.serv_req_center.task_management.beans.DocumentWithFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
