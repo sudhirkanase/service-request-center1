@@ -10,7 +10,6 @@ import java.io.Serializable;
 public class Document implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private long taskId;
 	private String documentName;
 	private long documentTypeId;
 	private String dueDate;
@@ -62,15 +61,6 @@ public class Document implements Serializable {
 	public void setDocumentAction(String documentAction) {
 		this.documentAction = documentAction;
 	}
-
-	public long getTaskId() {
-		return taskId;
-	}
-
-	public void setTaskId(long taskId) {
-		this.taskId = taskId;
-	}
-
 	public long getDocumentTypeId() {
 		return documentTypeId;
 	}
