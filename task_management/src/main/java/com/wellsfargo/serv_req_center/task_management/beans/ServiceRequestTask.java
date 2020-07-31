@@ -31,6 +31,7 @@ public class ServiceRequestTask implements Serializable {
 	private String taskCompleted;
 	private String selectedIndividual;
 	private String assignTo;
+	private List<Officer> officers;
 
 	public ServiceRequestTask() {
 
@@ -39,7 +40,7 @@ public class ServiceRequestTask implements Serializable {
 	public ServiceRequestTask(long id, String taskType, String taskSpecific, String workflowStep, Integer accountNo,
 			String accountName, String requesterName, String dueDate, String status, String phone, String createdDate,
 			Account accountDetail, String email, String assignedUserGroup, String assignedEmail, String accountService,
-			List<Document> documents, String taskCompleted, String assignTo, String selectedIndividual) {
+			List<Document> documents, String taskCompleted, String assignTo, String selectedIndividual, List<Officer> officers) {
 		super();
 		this.id = id;
 		this.taskType = taskType;
@@ -61,6 +62,7 @@ public class ServiceRequestTask implements Serializable {
 		this.taskCompleted = taskCompleted;
 		this.assignTo = assignTo;
 		this.selectedIndividual = selectedIndividual;
+		this.officers = officers;
 	}
 
 	public long getId() {
@@ -222,5 +224,14 @@ public class ServiceRequestTask implements Serializable {
 	public void setAssignTo(String assignTo) {
 		this.assignTo = assignTo;
 	}
+
+	public List<Officer> getOfficers() {
+		return officers;
+	}
+
+	public void setOfficers(List<Officer> officers) {
+		this.officers = officers;
+	}
+	
 	
 }

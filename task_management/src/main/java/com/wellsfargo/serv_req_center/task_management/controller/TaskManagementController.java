@@ -42,7 +42,6 @@ public class TaskManagementController {
 			save(file);
 			// saving document to ServiceRequestTask
 			Document document = new Document();
-			document.setTaskId(taskId);
 			document.setDocumentTypeId(documentTypeId);
 			document.setNotes(notes);
 			document.setDocumentName(file.getOriginalFilename());

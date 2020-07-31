@@ -59,8 +59,6 @@ public class TaskManagementService {
 			contactDetails.setAssignedUserGroup(taskDetail.getAssignedUserGroup());
 			// Set account data to contact Detail
 			contactDetails.setAccountDetail(accService.getAccount(acctNumber));
-			// Set Documents list to contact Detail
-			contactDetails.setDocuments(taskDetail.getDocuments());
 		}
 		return contactDetails;
 	}
@@ -116,7 +114,7 @@ public class TaskManagementService {
 		details.setWorkflowStep("Contact Center Entity");
 		details.setAccountNo(details.getAccountDetail().getAccountNumber());
 		details.setAccountName(details.getAccountDetail().getAccountName());
-
+		details.setDocuments(contactDetails.getDocuments());
 		// Set user details for requester
 		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (userDetails instanceof UserDetails) {
@@ -143,14 +141,13 @@ public class TaskManagementService {
 	}
 
 	public void saveDocument(Document document) {
-		ContactCenterDetail contactCenterDetail = new ContactCenterDetail();
-		contactCenterDetail = loadContactDetail(null, document.getTaskId());
+		ContactCenterDetail contactCenterDetail = contactDetails;
 		List<Document> documents = contactCenterDetail.getDocuments();
 		if(documents == null){
 			documents = new ArrayList<Document>();
 		}
 		documents.add(document);
-		contactCenterDetail.setDocuments(documents);
+		contactDetails.setDocuments(documents);
 	}
 
 }
