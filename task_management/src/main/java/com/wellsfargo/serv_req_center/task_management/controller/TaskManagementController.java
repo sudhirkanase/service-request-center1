@@ -7,13 +7,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import com.wellsfargo.serv_req_center.task_management.beans.Document;
+import com.wellsfargo.serv_req_center.task_management.beans.DocumentWithFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wellsfargo.serv_req_center.task_management.beans.ServiceRequestTask;
@@ -35,14 +34,24 @@ public class TaskManagementController {
 	}
 
 	@PostMapping("/documentUpload")
-	public ResponseEntity<String> documentUpload(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<String> documentUpload(@RequestParam("file") MultipartFile file,
+												 @RequestParam("taskId") long taskId,
+												 @RequestParam("documentTypeId") long documentTypeId,
+												 @RequestParam("notes") String notes) {
 		String message = "";
 		try {
 			save(file);
-			message = "Uploaded the file successfully: " + file.getOriginalFilename();
+			// saving document to ServiceRequestTask
+			Document document = new Document();
+			document.setTaskId(taskId);
+			document.setDocumentTypeId(documentTypeId);
+			document.setNotes(notes);
+			document.setDocumentName(file.getOriginalFilename());
+			taskService.saveDocument(document);
+			message = "Uploaded the file successfully: " +file.getOriginalFilename();
 			return ResponseEntity.status(HttpStatus.OK).body(message);
 		} catch (Exception e) {
-			message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+			message = "Could not upload the file: " +  file.getOriginalFilename() + "!";
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
 		}
 	}
