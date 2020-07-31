@@ -3,11 +3,13 @@ package com.wellsfargo.serv_req_center.task_management.service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.wellsfargo.serv_req_center.task_management.beans.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,17 +47,21 @@ public class TaskManagementService {
 		// Get task data from task list
 		ServiceRequestTask taskDetail = tasks.stream().filter(taskList -> taskList.getId() == id).findAny()
 				.orElse(null);
-		// Set task data in contact detail
-		contactDetails.setId(taskDetail.getId());
-		contactDetails.setStatus(taskDetail.getStatus());
-		contactDetails.setEmail(taskDetail.getEmail());
-		contactDetails.setAssignedEmail(taskDetail.getAssignedEmail());
-		contactDetails.setPhone(taskDetail.getPhone());
-		contactDetails.setAccountService(taskDetail.getAccountService());
-		contactDetails.setCreatedDate(taskDetail.getCreatedDate());
-		contactDetails.setAssignedUserGroup(taskDetail.getAssignedUserGroup());
-		// Set account data to contact Detail
-		contactDetails.setAccountDetail(accService.getAccount(acctNumber));
+		if (taskDetail != null) {
+			// Set task data in contact detail
+			contactDetails.setId(taskDetail.getId());
+			contactDetails.setStatus(taskDetail.getStatus());
+			contactDetails.setEmail(taskDetail.getEmail());
+			contactDetails.setAssignedEmail(taskDetail.getAssignedEmail());
+			contactDetails.setPhone(taskDetail.getPhone());
+			contactDetails.setAccountService(taskDetail.getAccountService());
+			contactDetails.setCreatedDate(taskDetail.getCreatedDate());
+			contactDetails.setAssignedUserGroup(taskDetail.getAssignedUserGroup());
+			// Set account data to contact Detail
+			contactDetails.setAccountDetail(accService.getAccount(acctNumber));
+			// Set Documents list to contact Detail
+			contactDetails.setDocuments(taskDetail.getDocuments());
+		}
 		return contactDetails;
 	}
 
@@ -134,6 +140,17 @@ public class TaskManagementService {
 				tasks.stream().
 				filter(task -> task.getAccountNo().equals(accountNo)).collect(Collectors.toList());
 		return taskList;
+	}
+
+	public void saveDocument(Document document) {
+		ContactCenterDetail contactCenterDetail = new ContactCenterDetail();
+		contactCenterDetail = loadContactDetail(null, document.getTaskId());
+		List<Document> documents = contactCenterDetail.getDocuments();
+		if(documents == null){
+			documents = new ArrayList<Document>();
+		}
+		documents.add(document);
+		contactCenterDetail.setDocuments(documents);
 	}
 
 }
