@@ -9,7 +9,15 @@ INSERT INTO roles (id, name) VALUES
 INSERT INTO users (id, user_name, password) VALUES 
 (1, 'admin', '$2a$10$DE00tu5tUyv7kqMyw.14L.oJNv6flYSjTGmmdYKeLB1I1Us7bAU6q'),
 (2, 'user1', '$2a$10$T9iIeZDoPBM66NdlPz7vFeMZEY3su/Tg//dmBgdua90uBC8vkfV3a'),
-(3, 'user2', '$2a$10$0EAfOC9ImarzQZLoDfh58.Aly379t6osmfzIGrUDoypx81h2oDFkO');
+(3, 'user2', '$2a$10$0EAfOC9ImarzQZLoDfh58.Aly379t6osmfzIGrUDoypx81h2oDFkO'),
+(4, 'bhushan', '$2a$10$DE00tu5tUyv7kqMyw.14L.oJNv6flYSjTGmmdYKeLB1I1Us7bAU6q'),
+(5, 'sudhir', '$2a$10$DE00tu5tUyv7kqMyw.14L.oJNv6flYSjTGmmdYKeLB1I1Us7bAU6q'),
+(6, 'heta', '$2a$10$DE00tu5tUyv7kqMyw.14L.oJNv6flYSjTGmmdYKeLB1I1Us7bAU6q'),
+(7, 'pankaj', '$2a$10$DE00tu5tUyv7kqMyw.14L.oJNv6flYSjTGmmdYKeLB1I1Us7bAU6q'),
+(8, 'priyanka', '$2a$10$DE00tu5tUyv7kqMyw.14L.oJNv6flYSjTGmmdYKeLB1I1Us7bAU6q'),
+(9, 'manganna', '$2a$10$DE00tu5tUyv7kqMyw.14L.oJNv6flYSjTGmmdYKeLB1I1Us7bAU6q'),
+(10, 'karan', '$2a$10$DE00tu5tUyv7kqMyw.14L.oJNv6flYSjTGmmdYKeLB1I1Us7bAU6q');
+
 
 insert into user_role(user_id, role_id) values
 (1,1),
