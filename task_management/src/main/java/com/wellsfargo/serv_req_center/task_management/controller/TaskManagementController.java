@@ -7,6 +7,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wellsfargo.serv_req_center.task_management.beans.ContactCenterDetail;
 import com.wellsfargo.serv_req_center.task_management.beans.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wellsfargo.serv_req_center.task_management.beans.ServiceRequestTask;
+import com.wellsfargo.serv_req_center.task_management.commons.TaskType;
 import com.wellsfargo.serv_req_center.task_management.service.TaskManagementService;
 
 @RestController
@@ -62,6 +68,26 @@ public class TaskManagementController {
 		} catch (Exception e) {
 			throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
 		}
+	}
+	
+	@PostMapping("/save/{taskType}")
+	public ResponseEntity save(@PathVariable("taskType") String taskType, @RequestBody String taskJson) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		TaskType task = null;
+		task=TaskType.valueOf(taskType);
+		
+		switch(task) 
+        { 
+            case CONTACTCENTER: 
+            	ContactCenterDetail contactCenterDetail=mapper.readValue(taskJson, ContactCenterDetail.class);
+                break; 
+            case ACCOUNT:
+                break;
+            default: 
+                System.out.println("no task"); 
+        } 
+		return ResponseEntity.ok(HttpStatus.OK);
 	}
 
 	private Path getUploadFilePath(String fileName) throws IOException {
