@@ -70,6 +70,10 @@ public class TaskManagementService {
 			jsonTasks = mapper.readValue(getClass().getResource("/data/task-list.json"),
 					new TypeReference<List<ServiceRequestTask>>() {
 					});
+			// Sort ID by descending order
+            jsonTasks = jsonTasks.stream()
+					.sorted(Comparator.comparing(ServiceRequestTask::getId).reversed())
+					.collect(Collectors.toList());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -134,7 +138,7 @@ public class TaskManagementService {
 	}
 
 	public List<ServiceRequestTask> getTaskList(Integer accountNo) {
-		List<ServiceRequestTask> taskList = 
+		List<ServiceRequestTask> taskList =
 				tasks.stream().
 				filter(task -> task.getAccountNo().equals(accountNo)).collect(Collectors.toList());
 		return taskList;
