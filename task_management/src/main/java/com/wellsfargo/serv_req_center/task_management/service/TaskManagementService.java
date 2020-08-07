@@ -16,10 +16,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wellsfargo.serv_req_center.auth.cache.LoggedInUserInfoCache;
 import com.wellsfargo.serv_req_center.task_management.beans.ContactCenterDetail;
 import com.wellsfargo.serv_req_center.task_management.beans.ServiceRequestTask;
+import com.wellsfargo.serv_req_center.task_management.exception.TaskType;
 
 @Service
 public class TaskManagementService {
@@ -32,35 +34,33 @@ public class TaskManagementService {
 
 	// for time being at class level
 	List<ServiceRequestTask> tasks = null;
-	ContactCenterDetail contactDetails = new ContactCenterDetail();
+	List<Document> documentList = null;
 
 	public List<ServiceRequestTask> getServiceReqTasks() {
-		// List<ServiceRequestTask> tasks = null;
 		if (tasks == null) {
 			tasks = loadTasks();
 		}
 		return tasks;
 	}
 
-	public ContactCenterDetail loadContactDetail(Integer acctNumber, long id) {
+	public ServiceRequestTask loadContactDetail(Integer acctNumber, long id) {
 
 		// Get task data from task list
 		ServiceRequestTask taskDetail = tasks.stream().filter(taskList -> taskList.getId() == id).findAny()
 				.orElse(null);
-		if (taskDetail != null) {
-			// Set task data in contact detail
-			contactDetails.setId(taskDetail.getId());
-			contactDetails.setStatus(taskDetail.getStatus());
-			contactDetails.setEmail(taskDetail.getEmail());
-			contactDetails.setAssignedEmail(taskDetail.getAssignedEmail());
-			contactDetails.setPhone(taskDetail.getPhone());
-			contactDetails.setAccountService(taskDetail.getAccountService());
-			contactDetails.setCreatedDate(taskDetail.getCreatedDate());
-			contactDetails.setAssignedUserGroup(taskDetail.getAssignedUserGroup());
-			// Set account data to contact Detail
-			contactDetails.setAccountDetail(accService.getAccount(acctNumber));
+
+		List<Document> docList = null;
+
+		if (documentList != null) {
+			docList = documentList.stream().filter(document -> document.getTaskId() == id).collect(Collectors.toList());
 		}
-		return contactDetails;
+
+		if (taskDetail != null) {
+			// Set account data to contact Detail
+			taskDetail.setDocuments(docList);
+			taskDetail.setAccountDetail(accService.getAccount(acctNumber));
+		}
+		return taskDetail;
 	}
 
 	private List<ServiceRequestTask> loadTasks() {
@@ -71,8 +71,7 @@ public class TaskManagementService {
 					new TypeReference<List<ServiceRequestTask>>() {
 					});
 			// Sort ID by descending order
-            jsonTasks = jsonTasks.stream()
-					.sorted(Comparator.comparing(ServiceRequestTask::getId).reversed())
+			jsonTasks = jsonTasks.stream().sorted(Comparator.comparing(ServiceRequestTask::getId).reversed())
 					.collect(Collectors.toList());
 
 		} catch (IOException e) {
@@ -108,7 +107,7 @@ public class TaskManagementService {
 		return details;
 	}
 
-	public ContactCenterDetail saveTask(ContactCenterDetail details) {
+	public ServiceRequestTask saveTask(ServiceRequestTask details) {
 
 		ServiceRequestTask taskDetail = tasks.stream().filter(taskList -> taskList.getId() == details.getId()).findAny()
 				.orElse(null);
@@ -118,7 +117,6 @@ public class TaskManagementService {
 		details.setWorkflowStep("Contact Center Entity");
 		details.setAccountNo(details.getAccountDetail().getAccountNumber());
 		details.setAccountName(details.getAccountDetail().getAccountName());
-		details.setDocuments(contactDetails.getDocuments());
 		// Set user details for requester
 		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (userDetails instanceof UserDetails) {
@@ -132,26 +130,47 @@ public class TaskManagementService {
 			tasks.set(tasks.indexOf(taskDetail), details);
 		}
 
-		contactDetails = details;
-
-		return (ContactCenterDetail) details;
+		return details;
 	}
 
 	public List<ServiceRequestTask> getTaskList(Integer accountNo) {
-		List<ServiceRequestTask> taskList =
-				tasks.stream().
-				filter(task -> task.getAccountNo().equals(accountNo)).collect(Collectors.toList());
+
+		List<ServiceRequestTask> taskList = tasks.stream().filter(task -> task.getAccountNo().equals(accountNo))
+				.collect(Collectors.toList());
 		return taskList;
 	}
 
 	public void saveDocument(Document document) {
-		ContactCenterDetail contactCenterDetail = contactDetails;
-		List<Document> documents = contactCenterDetail.getDocuments();
-		if(documents == null){
-			documents = new ArrayList<Document>();
+
+		if (documentList == null) {
+			documentList = new ArrayList<Document>();
 		}
-		documents.add(document);
-		contactDetails.setDocuments(documents);
+		documentList.add(document);
+	}
+
+	public ServiceRequestTask convertJsonObjToBean(String taskType, String taskJson) {
+		ServiceRequestTask servReqBean = null;
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			TaskType task = null;
+			task = TaskType.valueOf(taskType);
+
+			switch (task) {
+			case CONTACTCENTER:
+				servReqBean = mapper.readValue(taskJson, ContactCenterDetail.class);
+				break;
+			case ACCOUNT:
+				break;
+			default:
+				throw new Exception("Invalid task type:- " + taskType);
+			}
+		} catch (Exception e) {
+			// To be thrown proper exception message
+			e.printStackTrace();
+		}
+
+		return servReqBean;
 	}
 
 }

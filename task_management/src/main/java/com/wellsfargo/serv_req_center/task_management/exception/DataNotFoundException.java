@@ -1,4 +1,4 @@
-package com.wellsfargo.serv_req_center.task_management.commons;
+package com.wellsfargo.serv_req_center.task_management.exception;
 
 public class DataNotFoundException extends RuntimeException {
 	
