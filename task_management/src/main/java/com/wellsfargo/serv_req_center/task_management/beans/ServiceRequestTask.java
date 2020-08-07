@@ -3,6 +3,8 @@ package com.wellsfargo.serv_req_center.task_management.beans;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Base class for all Tasks
  * Includes Common fields related to all tasks
@@ -11,6 +13,7 @@ import java.util.List;
  */
 public class ServiceRequestTask implements Serializable {
 	private static final long serialVersionUID = 1L;
+	@NotNull
 	private long id;
 	private String taskType;
 	private String taskSpecific;

@@ -1,4 +1,4 @@
-package com.wellsfargo.serv_req_center.task_management.commons;
+package com.wellsfargo.serv_req_center.task_management.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +14,8 @@ public class SrcaExceptionHandler {
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
 	
-	@ExceptionHandler(value = SRCAException.class)
-	public ResponseEntity<ErrorDetails> handleSRCAException(SRCAException e) {
+	@ExceptionHandler(value = SrcaException.class)
+	public ResponseEntity<ErrorDetails> handleSRCAException(SrcaException e) {
 		ErrorDetails error = new ErrorDetails("FIELD_REQUIRED_ERROR", e.getMessage());
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}

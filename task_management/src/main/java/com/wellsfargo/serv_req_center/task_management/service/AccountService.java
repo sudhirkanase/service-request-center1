@@ -11,8 +11,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wellsfargo.serv_req_center.task_management.beans.Account;
 import com.wellsfargo.serv_req_center.task_management.beans.AccountType;
-import com.wellsfargo.serv_req_center.task_management.commons.DataNotFoundException;
-import com.wellsfargo.serv_req_center.task_management.commons.SRCAException;
+import com.wellsfargo.serv_req_center.task_management.exception.DataNotFoundException;
+import com.wellsfargo.serv_req_center.task_management.exception.SrcaException;
 
 @Service
 public class AccountService {
@@ -24,7 +24,7 @@ public class AccountService {
 		// List<Account> accounts = null;
 		List<Account> filteredAccounts = null;
 		if(account.getAccountNumber() == null && account.getAccountName() == null) {
-			throw new SRCAException("Either accountNumber or accountName is required");
+			throw new SrcaException("Either accountNumber or accountName is required");
 		}
 		if (accounts == null) {
 			accounts = loadAccounts();

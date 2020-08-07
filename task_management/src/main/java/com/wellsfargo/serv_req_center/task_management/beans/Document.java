@@ -18,6 +18,7 @@ public class Document implements Serializable {
 	private String additionalInst;
 	private String attachment;
 	private String documentAction;
+	private long taskId;
 	
 	public String getDocumentName() {
 		return documentName;
@@ -68,4 +69,11 @@ public class Document implements Serializable {
 	public void setDocumentTypeId(long documentTypeId) {
 		this.documentTypeId = documentTypeId;
 	}
+	public long getTaskId() {
+		return taskId;
+	}
+	public void setTaskId(long taskId) {
+		this.taskId = taskId;
+	}
+	
 }
