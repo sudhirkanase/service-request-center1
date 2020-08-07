@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wellsfargo.serv_req_center.task_management.beans.ServiceRequestTask;
-import com.wellsfargo.serv_req_center.task_management.exception.DataNotFoundException;
 import com.wellsfargo.serv_req_center.task_management.exception.SrcaValidationException;
 import com.wellsfargo.serv_req_center.task_management.validator.ServiceRequestValidator;
 
@@ -17,8 +16,8 @@ public class TaskValidatorService implements ITaskValidator {
 	ServiceRequestValidator validator;
 
 	@Override
-	public Set<String> validate(ServiceRequestTask contactDetail) {
-		Set<String> validate = validator.validate(contactDetail);
+	public Set<String> validate(ServiceRequestTask task) {
+		Set<String> validate = validator.validate(task);
 		if(validate.size() > 0) {
 			throw new SrcaValidationException(String.join(",", validate));
 		}

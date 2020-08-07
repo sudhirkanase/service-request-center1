@@ -40,6 +40,11 @@ public class TaskManagementService {
 		if (tasks == null) {
 			tasks = loadTasks();
 		}
+
+		// Sort ID by descending order
+		tasks = tasks.stream().sorted(Comparator.comparing(ServiceRequestTask::getId).reversed())
+				.collect(Collectors.toList());
+
 		return tasks;
 	}
 
@@ -70,9 +75,6 @@ public class TaskManagementService {
 			jsonTasks = mapper.readValue(getClass().getResource("/data/task-list.json"),
 					new TypeReference<List<ServiceRequestTask>>() {
 					});
-			// Sort ID by descending order
-			jsonTasks = jsonTasks.stream().sorted(Comparator.comparing(ServiceRequestTask::getId).reversed())
-					.collect(Collectors.toList());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -6,5 +6,5 @@ import com.wellsfargo.serv_req_center.task_management.beans.ServiceRequestTask;
 
 public interface ITaskValidator {
 
-	Set<String> validate(ServiceRequestTask contactDetail);
+	Set<String> validate(ServiceRequestTask task);
 }
