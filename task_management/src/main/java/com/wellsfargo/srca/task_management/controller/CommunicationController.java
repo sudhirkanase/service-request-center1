@@ -21,7 +21,12 @@ public class CommunicationController {
     CommunicationService communicationService;
 
     @PostMapping("/saveCommunication")
-    public ResponseEntity<Communication> saveCommunication(@RequestBody Communication communication) {
+    public ResponseEntity<List<Communication>> saveCommunication(@RequestBody Communication communication) {
         return ResponseEntity.ok(communicationService.saveCommunication(communication));
+    }
+
+    @PostMapping("/deleteCommunication")
+    public ResponseEntity<List<Communication>> deleteCommunication(@RequestBody long communicationId) {
+        return ResponseEntity.ok(communicationService.deleteByCommunicationId(communicationId));
     }
 }

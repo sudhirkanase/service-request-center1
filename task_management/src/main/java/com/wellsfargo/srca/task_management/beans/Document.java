@@ -20,6 +20,23 @@ public class Document implements Serializable {
     private String documentAction;
     private long taskId;
     private long documentId;
+    private long accountNumber;
+
+    public Document() { }
+
+    public Document(String documentName, long documentTypeId, String dueDate, String added, String notes, String additionalInst, String attachment, String documentAction, long taskId, long documentId, long accountNumber) {
+        this.documentName = documentName;
+        this.documentTypeId = documentTypeId;
+        this.dueDate = dueDate;
+        this.added = added;
+        this.notes = notes;
+        this.additionalInst = additionalInst;
+        this.attachment = attachment;
+        this.documentAction = documentAction;
+        this.taskId = taskId;
+        this.documentId = documentId;
+        this.accountNumber = accountNumber;
+    }
 
     public String getDocumentName() {
         return documentName;
@@ -101,4 +118,11 @@ public class Document implements Serializable {
         this.documentId = documentId;
     }
 
+    public long getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(long accountNumber) {
+        this.accountNumber = accountNumber;
+    }
 }

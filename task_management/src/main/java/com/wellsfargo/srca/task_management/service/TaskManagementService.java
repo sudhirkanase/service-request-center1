@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.wellsfargo.srca.task_management.beans.Communication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,6 +32,9 @@ public class TaskManagementService {
 
 	@Autowired
 	DocumentService documentService;
+
+	@Autowired
+	CommunicationService communicationService;
 
 	@Autowired
 	LoggedInUserInfoCache userCache;
@@ -57,14 +61,20 @@ public class TaskManagementService {
 				.orElse(null);
 
 		List<Document> docList = null;
+		List<Communication> communicationList = null;
 
 		if (documentService.getDocumentList() != null) {
-			docList = documentService.getDocumentList().stream().filter(document -> document.getTaskId() == id).collect(Collectors.toList());
+			docList = documentService.getDocumentList().stream().filter(document -> document.getTaskId() == id && document.getAccountNumber() == acctNumber).collect(Collectors.toList());
+		}
+
+		if (communicationService.getCommunicationList() != null) {
+			communicationList = communicationService.getCommunicationList().stream().filter(comm -> comm.getTaskId() == id && comm.getAccountNumber() == acctNumber).collect(Collectors.toList());
 		}
 
 		if (taskDetail != null) {
 			// Set account data to contact Detail
 			taskDetail.setDocuments(docList);
+			taskDetail.setCommunications(communicationList);
 			taskDetail.setAccountDetail(accService.getAccount(acctNumber));
 		}
 		return taskDetail;
