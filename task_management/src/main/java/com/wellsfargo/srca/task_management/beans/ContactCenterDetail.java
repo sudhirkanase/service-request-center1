@@ -1,36 +1,36 @@
 package com.wellsfargo.srca.task_management.beans;
 
 import java.io.Serializable;
-
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import com.wellsfargo.srca.task_management.validator.ContactCenterConstraint;
 
-import com.wellsfargo.srca.task_management.validator.ActionConstraint;
 /**
  * Contact Center Detail
  * @author Heta Shah
  *
  */
-@ActionConstraint({"callCode", "action"})
+@ContactCenterConstraint({"callCode", "action", "isTaxpayerId", "taxpayerId"})
 public class ContactCenterDetail extends ServiceRequestTask implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@NotNull
+	@NotBlank
 	private String callerName;
 	@NotNull
 	private String callerPhone;
-	@NotNull
+	@NotBlank
 	private String callCode;
-	@NotNull
+	@NotBlank
 	private String action;
-	@NotNull
+	@NotBlank
 	private String fullyAuthenticated;
-	@NotNull
+	@NotBlank
 	private String isTaxpayerId;
 	private String taxpayerId;
 	private String taskPriority;
 	private String taskNotes;
-	@NotNull
+	@NotBlank
 	private String callDetails;
 	
 	public String getCallerName() {

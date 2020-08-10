@@ -3,6 +3,8 @@ package com.wellsfargo.srca.task_management.beans;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -14,7 +16,9 @@ import javax.validation.constraints.NotNull;
 public class ServiceRequestTask implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@NotNull
+	@Min(0)
 	private long id;
+	@NotBlank
 	private String taskType;
 	private String taskSpecific;
 	private String workflowStep;

@@ -8,12 +8,11 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Constraint(validatedBy = ActionValidator.class)
-@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER,
-    ElementType.ANNOTATION_TYPE, ElementType.TYPE})
+@Constraint(validatedBy = ContactCenterValidator.class)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ActionConstraint {
-    String message() default "Invalid Action Selected";
+public @interface ContactCenterConstraint {
+    String message() default "";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     String[] value();
