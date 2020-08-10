@@ -1,10 +1,10 @@
-package com.wellsfargo.serv_req_center.authentication_service;
+package com.wellsfargo.srca.task_management;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-//@SpringBootTest
-class AuthenticationServiceApplicationTests {
+@SpringBootTest
+class TaskManagementApplicationTests {
 
 	//@Test
 	void contextLoads() {
