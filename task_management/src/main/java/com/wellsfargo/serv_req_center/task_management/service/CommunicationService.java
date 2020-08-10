@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class CommunicationService {
     List<Communication> communicationList = null;
-    AtomicInteger atomicInteger = new AtomicInteger(0);
+    AtomicInteger atomicInteger = new AtomicInteger(1);
 
     public Communication saveCommunication(Communication communication) {
         communication.setCommunicationId((long) atomicInteger.getAndIncrement());

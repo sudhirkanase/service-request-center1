@@ -12,10 +12,12 @@ public class Communication implements Serializable {
     private String name;
     private String number;
     private Date followUpDate;
+    private String notes;
 
-    Communication(){ }
+    Communication() {
+    }
 
-    public Communication(long communicationId, long taskId, String communicationType, String communicationReason, String name, String number, Date followUpDate) {
+    public Communication(long communicationId, long taskId, String communicationType, String communicationReason, String name, String number, Date followUpDate, String notes) {
         this.communicationId = communicationId;
         this.taskId = taskId;
         this.communicationType = communicationType;
@@ -23,6 +25,7 @@ public class Communication implements Serializable {
         this.name = name;
         this.number = number;
         this.followUpDate = followUpDate;
+        this.notes = notes;
     }
 
     public long getCommunicationId() {
@@ -81,6 +84,14 @@ public class Communication implements Serializable {
         this.followUpDate = followUpDate;
     }
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
     @Override
     public String toString() {
         return "Communication{" +
@@ -91,6 +102,7 @@ public class Communication implements Serializable {
                 ", name='" + name + '\'' +
                 ", number='" + number + '\'' +
                 ", followUpDate=" + followUpDate +
+                ", notes='" + notes + '\'' +
                 '}';
     }
 }
