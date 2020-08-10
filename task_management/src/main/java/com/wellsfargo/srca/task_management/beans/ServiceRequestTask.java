@@ -39,16 +39,13 @@ public class ServiceRequestTask implements Serializable {
 	private String selectedIndividual;
 	private String assignTo;
 	private List<Officer> officers;
+	List<Communication> communications;
 
 	public ServiceRequestTask() {
 
 	}
 
-	public ServiceRequestTask(long id, String taskType, String taskSpecific, String workflowStep, Integer accountNo,
-			String accountName, String requesterName, String dueDate, String status, String phone, String createdDate,
-			Account accountDetail, String email, String assignedUserGroup, String assignedEmail, String accountService,
-			List<Document> documents, String taskCompleted, String assignTo, String selectedIndividual, List<Officer> officers) {
-		super();
+	public ServiceRequestTask(@NotNull long id, String taskType, String taskSpecific, String workflowStep, Integer accountNo, String accountName, String requesterName, String dueDate, String status, String phone, String createdDate, Account accountDetail, String email, String assignedUserGroup, String assignedEmail, String accountService, List<Document> documents, String taskCompleted, String selectedIndividual, String assignTo, List<Officer> officers, List<Communication> communications) {
 		this.id = id;
 		this.taskType = taskType;
 		this.taskSpecific = taskSpecific;
@@ -67,9 +64,10 @@ public class ServiceRequestTask implements Serializable {
 		this.accountService = accountService;
 		this.documents = documents;
 		this.taskCompleted = taskCompleted;
-		this.assignTo = assignTo;
 		this.selectedIndividual = selectedIndividual;
+		this.assignTo = assignTo;
 		this.officers = officers;
+		this.communications = communications;
 	}
 
 	public long getId() {
@@ -239,6 +237,12 @@ public class ServiceRequestTask implements Serializable {
 	public void setOfficers(List<Officer> officers) {
 		this.officers = officers;
 	}
-	
-	
+
+	public List<Communication> getCommunications() {
+		return communications;
+	}
+
+	public void setCommunications(List<Communication> communications) {
+		this.communications = communications;
+	}
 }
