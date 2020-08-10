@@ -30,11 +30,13 @@ public class TaskManagementService {
 	AccountService accService;
 
 	@Autowired
-	LoggedInUserInfoCache userCahce;
+	DocumentService documentService;
+
+	@Autowired
+	LoggedInUserInfoCache userCache;
 
 	// for time being at class level
 	List<ServiceRequestTask> tasks = null;
-	List<Document> documentList = null;
 
 	public List<ServiceRequestTask> getServiceReqTasks() {
 		if (tasks == null) {
@@ -56,8 +58,8 @@ public class TaskManagementService {
 
 		List<Document> docList = null;
 
-		if (documentList != null) {
-			docList = documentList.stream().filter(document -> document.getTaskId() == id).collect(Collectors.toList());
+		if (documentService.getDocumentList() != null) {
+			docList = documentService.getDocumentList().stream().filter(document -> document.getTaskId() == id).collect(Collectors.toList());
 		}
 
 		if (taskDetail != null) {
@@ -140,14 +142,6 @@ public class TaskManagementService {
 		List<ServiceRequestTask> taskList = tasks.stream().filter(task -> task.getAccountNo().equals(accountNo))
 				.collect(Collectors.toList());
 		return taskList;
-	}
-
-	public void saveDocument(Document document) {
-
-		if (documentList == null) {
-			documentList = new ArrayList<Document>();
-		}
-		documentList.add(document);
 	}
 
 	public ServiceRequestTask convertJsonObjToBean(String taskType, String taskJson) {

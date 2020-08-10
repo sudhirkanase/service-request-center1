@@ -42,59 +42,12 @@ public class TaskManagementController {
 		return ResponseEntity.ok(taskService.getServiceReqTasks());
 	}
 
-	@PostMapping("/documentUpload")
-	public ResponseEntity<String> documentUpload(@RequestParam("file") MultipartFile file,
-			@RequestParam("taskId") long taskId, @RequestParam("documentTypeId") long documentTypeId,
-			@RequestParam("notes") String notes) {
-		String message = "";
-		try {
-			save(file);
-			// saving document to ServiceRequestTask
-			Document document = new Document();
-			document.setDocumentTypeId(documentTypeId);
-			document.setNotes(notes);
-			document.setDocumentName(file.getOriginalFilename());
-			document.setTaskId(taskId);
-			taskService.saveDocument(document);
-			message = "Uploaded the file successfully: " + file.getOriginalFilename();
-			return ResponseEntity.status(HttpStatus.OK).body(message);
-		} catch (Exception e) {
-			message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
-		}
-	}
-
-	public void save(MultipartFile file) {
-		try {
-			byte[] bytes = file.getBytes();
-			Path uploadFilePath = getUploadFilePath(file.getOriginalFilename());
-			Files.write(uploadFilePath, bytes);
-		} catch (Exception e) {
-			throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
-		}
-	}
-
 	@PostMapping("/save/{taskType}")
 	public ResponseEntity save(@PathVariable("taskType") String taskType, @RequestBody String taskJson) {
 		ServiceRequestTask servReqBean = taskService.convertJsonObjToBean(taskType, taskJson);
 		validatorService.validate(servReqBean);
 		taskService.saveTask(servReqBean);
 		return ResponseEntity.ok(HttpStatus.OK);
-	}
-
-	private Path getUploadFilePath(String fileName) throws IOException {
-
-		// <TODO> File Folder existance should be
-		Path fileUploadFolder = Paths
-				.get(Paths.get(".").normalize().toAbsolutePath().getParent() + File.separator + UPLOAD_FOLDER);
-		// Path path = Paths.get(Paths.get(".").normalize().toAbsolutePath()+ "\\test\\"
-		// + file.getOriginalFilename());
-		if (!Files.isDirectory(fileUploadFolder)) {
-			Files.createDirectories(fileUploadFolder);
-		}
-		System.out.println("File upload path:- " + fileUploadFolder.toString());
-		Path uploadFilePath = Paths.get(fileUploadFolder + File.separator + fileName);
-		return uploadFilePath;
 	}
 
 	@PostMapping("/getTaskDetails")
