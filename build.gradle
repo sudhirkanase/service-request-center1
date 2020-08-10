@@ -29,7 +29,7 @@
  	
  	sourceCompatibility = "${source_compatibility_version}"
  
-	group = 'com.wellsfargo.serv_req_center'
+	group = 'com.wellsfargo.srca'
 	version = '1.0.0'
 	repositories {
 		mavenCentral()
@@ -46,8 +46,8 @@ subprojects {
 		//springCloudVersion = 'Hoxton.SR5'
 	}
 	
-	// Output folder name 
-	buildDir= "target"	
+	// Output folder name default is lib
+	//buildDir= "target"	
 	
 	//apply plugin 'java'	
 	//print "TEST-->${source_compatibility_version}"
