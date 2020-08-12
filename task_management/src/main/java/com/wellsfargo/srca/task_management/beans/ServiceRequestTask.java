@@ -8,8 +8,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * Base class for all Tasks
- * Includes Common fields related to all tasks
+ * Base class for all Tasks Includes Common fields related to all tasks
+ * 
  * @author Heta Shah
  *
  */
@@ -39,13 +39,19 @@ public class ServiceRequestTask implements Serializable {
 	private String selectedIndividual;
 	private String assignTo;
 	private List<Officer> officers;
-	List<Communication> communications;
+	private List<Communication> communications;
+	private List<Account> additionalAccounts;
 
 	public ServiceRequestTask() {
 
 	}
 
-	public ServiceRequestTask(@NotNull long id, String taskType, String taskSpecific, String workflowStep, Integer accountNo, String accountName, String requesterName, String dueDate, String status, String phone, String createdDate, Account accountDetail, String email, String assignedUserGroup, String assignedEmail, String accountService, List<Document> documents, String taskCompleted, String selectedIndividual, String assignTo, List<Officer> officers, List<Communication> communications) {
+	public ServiceRequestTask(long id, String taskType, String taskSpecific, String workflowStep, Integer accountNo,
+			String accountName, String requesterName, String dueDate, String status, String phone, String createdDate,
+			Account accountDetail, String email, String assignedUserGroup, String assignedEmail, String accountService,
+			List<Document> documents, String taskCompleted, String assignTo, String selectedIndividual,
+			List<Officer> officers, List<Account> additionalAccounts, List<Communication> communications) {
+		super();
 		this.id = id;
 		this.taskType = taskType;
 		this.taskSpecific = taskSpecific;
@@ -68,6 +74,7 @@ public class ServiceRequestTask implements Serializable {
 		this.assignTo = assignTo;
 		this.officers = officers;
 		this.communications = communications;
+		this.additionalAccounts = additionalAccounts;
 	}
 
 	public long getId() {
@@ -244,5 +251,13 @@ public class ServiceRequestTask implements Serializable {
 
 	public void setCommunications(List<Communication> communications) {
 		this.communications = communications;
+	}
+
+	public List<Account> getAdditionalAccounts() {
+		return additionalAccounts;
+	}
+
+	public void setAdditionalAccounts(List<Account> additionalAccounts) {
+		this.additionalAccounts = additionalAccounts;
 	}
 }
