@@ -54,13 +54,13 @@ public class AuthenticationController {
 
 		authenticate(user.getUsername(), user.getPassword());
 
-		HttpSessionCsrfTokenRepository csrfRepo = new HttpSessionCsrfTokenRepository();
-		CsrfToken token = csrfRepo.generateToken(request);
+//		HttpSessionCsrfTokenRepository csrfRepo = new HttpSessionCsrfTokenRepository();
+//		CsrfToken token = csrfRepo.generateToken(request);
 
 		final UserDetails userDetails = userDetailservice.loadUserByUsername(user.getUsername());
 
 		// add in the cache
-		userCache.put(token.getToken(), (User) userDetails);
+		//userCache.put(token.getToken(), (User) userDetails);
 		
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 				userDetails, null, userDetails.getAuthorities());
@@ -69,7 +69,7 @@ public class AuthenticationController {
 
 		BeanUtils.copyProperties(userDetails, user);
 		user.setFullName(userDetails.getUsername());
-		user.setAuthToken(token.getToken());
+		//user.setAuthToken(token.getToken());
 		user.setPassword(null);
 		return ResponseEntity.ok(user);
 	}
