@@ -3,13 +3,11 @@ package com.wellsfargo.srca.task_management.service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.wellsfargo.srca.task_management.beans.Communication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +17,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wellsfargo.srca.auth.cache.LoggedInUserInfoCache;
+import com.wellsfargo.srca.task_management.beans.Audit;
+import com.wellsfargo.srca.task_management.beans.Communication;
 import com.wellsfargo.srca.task_management.beans.ContactCenterDetail;
 import com.wellsfargo.srca.task_management.beans.Document;
 import com.wellsfargo.srca.task_management.beans.ServiceRequestTask;
@@ -36,6 +36,9 @@ public class TaskManagementService {
 	@Autowired
 	CommunicationService communicationService;
 
+	@Autowired
+	AuditService auditService;
+	
 	@Autowired
 	LoggedInUserInfoCache userCache;
 
@@ -62,6 +65,7 @@ public class TaskManagementService {
 
 		List<Document> docList = null;
 		List<Communication> communicationList = null;
+		List<Audit> auditList = null;
 
 		if (documentService.getDocumentList() != null) {
 			docList = documentService.getDocumentList().stream().filter(document -> document.getTaskId() == id && document.getAccountNumber() == acctNumber).collect(Collectors.toList());
@@ -70,12 +74,17 @@ public class TaskManagementService {
 		if (communicationService.getCommunicationList() != null) {
 			communicationList = communicationService.getCommunicationList().stream().filter(comm -> comm.getTaskId() == id && comm.getAccountNumber() == acctNumber).collect(Collectors.toList());
 		}
+		
+		if (auditService.getAuditList() != null) {
+			auditList = auditService.getAuditList().stream().filter(audit -> audit.getTaskId() == id).collect(Collectors.toList());
+		}
 
 		if (taskDetail != null) {
 			// Set account data to contact Detail
 			taskDetail.setDocuments(docList);
 			taskDetail.setCommunications(communicationList);
 			taskDetail.setAccountDetail(accService.getAccount(acctNumber));
+			taskDetail.setAudit(auditList);
 		}
 		return taskDetail;
 	}
