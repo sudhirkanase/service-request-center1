@@ -41,6 +41,7 @@ public class ServiceRequestTask implements Serializable {
 	private List<Officer> officers;
 	private List<Communication> communications;
 	private List<Account> additionalAccounts;
+	private List<Audit> audit;
 
 	public ServiceRequestTask() {
 
@@ -259,5 +260,13 @@ public class ServiceRequestTask implements Serializable {
 
 	public void setAdditionalAccounts(List<Account> additionalAccounts) {
 		this.additionalAccounts = additionalAccounts;
+	}
+
+	public List<Audit> getAudit() {
+		return audit;
+	}
+
+	public void setAudit(List<Audit> audit) {
+		this.audit = audit;
 	}
 }

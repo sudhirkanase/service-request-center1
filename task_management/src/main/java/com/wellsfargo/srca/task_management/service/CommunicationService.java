@@ -1,16 +1,14 @@
 package com.wellsfargo.srca.task_management.service;
-
-import com.wellsfargo.srca.task_management.beans.Document;
-import com.wellsfargo.srca.task_management.exception.DataNotFoundException;
-import org.springframework.stereotype.Service;
-
-import com.wellsfargo.srca.task_management.beans.Communication;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
+import com.wellsfargo.srca.task_management.beans.Communication;
+import com.wellsfargo.srca.task_management.exception.DataNotFoundException;
 
 @Service
 public class CommunicationService {
