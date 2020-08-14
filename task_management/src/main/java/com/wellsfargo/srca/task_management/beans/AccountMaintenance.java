@@ -8,7 +8,6 @@ public class AccountMaintenance extends ServiceRequestTask {
 	
 	@NotBlank
 	private String changeDescription;
-	@NotBlank
 	private String taskPriority;
 	@NotBlank
 	private String additionalInformation;
