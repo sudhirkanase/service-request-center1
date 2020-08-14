@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wellsfargo.srca.auth.cache.LoggedInUserInfoCache;
+import com.wellsfargo.srca.task_management.beans.AccountMaintenance;
 import com.wellsfargo.srca.task_management.beans.Audit;
 import com.wellsfargo.srca.task_management.beans.Communication;
 import com.wellsfargo.srca.task_management.beans.ContactCenterDetail;
@@ -175,7 +176,8 @@ public class TaskManagementService {
 			case CONTACTCENTER:
 				servReqBean = mapper.readValue(taskJson, ContactCenterDetail.class);
 				break;
-			case ACCOUNT:
+			case ACCOUNTMAINTENANCE:
+				servReqBean = mapper.readValue(taskJson, AccountMaintenance.class);
 				break;
 			default:
 				throw new Exception("Invalid task type:- " + taskType);
