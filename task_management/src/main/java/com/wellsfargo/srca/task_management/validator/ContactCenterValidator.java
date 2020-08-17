@@ -19,7 +19,7 @@ public class ContactCenterValidator implements ConstraintValidator<ContactCenter
 
 	String[] cashTransactionsActions = { "ACH Disbursement", " Stop Payment/Re-Issue", "ACH Receipt" };
 
-	String[] generalInformationActions = { " General Information request", "Multiple client request" };
+	String[] generalInformationActions = { "General Information request", "Multiple client request" };
 
 	public void initialize(ContactCenterConstraint constraint) {
 		this.field1 = constraint.value()[0];
@@ -66,7 +66,7 @@ public class ContactCenterValidator implements ConstraintValidator<ContactCenter
 				: callCodeValue.equals("Client Contact") ? Arrays.asList(clientContactActions).contains(actionValue)
 						: callCodeValue.equals("Cash Transactions")
 								? Arrays.asList(cashTransactionsActions).contains(actionValue)
-								: callCodeValue.equals("General Information")
+								: callCodeValue.equals("General information")
 										? Arrays.asList(generalInformationActions).contains(actionValue)
 										: false;
 	}
