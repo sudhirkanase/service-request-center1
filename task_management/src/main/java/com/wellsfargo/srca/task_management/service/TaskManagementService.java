@@ -39,7 +39,7 @@ public class TaskManagementService {
 
 	@Autowired
 	AuditService auditService;
-	
+
 	@Autowired
 	LoggedInUserInfoCache userCache;
 
@@ -69,15 +69,20 @@ public class TaskManagementService {
 		List<Audit> auditList = null;
 
 		if (documentService.getDocumentList() != null) {
-			docList = documentService.getDocumentList().stream().filter(document -> document.getTaskId() == id && document.getAccountNumber() == acctNumber).collect(Collectors.toList());
+			docList = documentService.getDocumentList().stream()
+					.filter(document -> document.getTaskId() == id && document.getAccountNumber() == acctNumber)
+					.collect(Collectors.toList());
 		}
 
 		if (communicationService.getCommunicationList() != null) {
-			communicationList = communicationService.getCommunicationList().stream().filter(comm -> comm.getTaskId() == id && comm.getAccountNumber() == acctNumber).collect(Collectors.toList());
+			communicationList = communicationService.getCommunicationList().stream()
+					.filter(comm -> comm.getTaskId() == id && comm.getAccountNumber() == acctNumber)
+					.collect(Collectors.toList());
 		}
-		
+
 		if (auditService.getAuditList() != null) {
-			auditList = auditService.getAuditList().stream().filter(audit -> audit.getTaskId() == id).collect(Collectors.toList());
+			auditList = auditService.getAuditList().stream().filter(audit -> audit.getTaskId() == id)
+					.collect(Collectors.toList());
 		}
 
 		if (taskDetail != null) {
@@ -147,12 +152,27 @@ public class TaskManagementService {
 			details.setRequesterName(((UserDetails) userDetails).getUsername());
 		}
 
+		Audit auditDetails = new Audit();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss a");
+		LocalDateTime now = LocalDateTime.now();
+		auditDetails.setDate((String) dtf.format(now));
+		auditDetails.setTaskId(details.getId());
+		if (userDetails instanceof UserDetails) {
+			auditDetails.setUser(((UserDetails) userDetails).getUsername());
+		}
 		// if already exists then update the data
 		if (taskDetail == null) {
+			auditDetails.setAuditType("Task Created");
+			auditDetails.setAction("Task Created");
 			tasks.add(details);
 		} else {
 			tasks.set(tasks.indexOf(taskDetail), details);
+			auditDetails.setAuditType("Task Updated");
+			auditDetails.setAction("Task Updated");
 		}
+		
+		//To Save Audit data
+		auditService.saveAuditDetails(auditDetails);
 
 		return details;
 	}

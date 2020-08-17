@@ -1,6 +1,13 @@
 package com.wellsfargo.srca.task_management.controller;
 
-import com.wellsfargo.srca.task_management.beans.Communication;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.wellsfargo.srca.task_management.beans.Document;
 import com.wellsfargo.srca.task_management.service.DocumentService;
 import com.wellsfargo.srca.task_management.service.TaskValidatorService;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 public class DocumentController {
