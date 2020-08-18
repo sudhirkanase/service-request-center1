@@ -46,7 +46,7 @@ public class CommunicationService {
 		auditDetails.setDate((String) dtf.format(now));
 		auditDetails.setTaskId(communication.getTaskId());
 		auditDetails.setAuditType("Communication Details Created");
-		auditDetails.setAction("Communication Details Created");
+		auditDetails.setAction("Entered Note: Communication Details Created");
 		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (userDetails instanceof UserDetails) {
 			auditDetails.setUser(((UserDetails) userDetails).getUsername());
@@ -75,7 +75,7 @@ public class CommunicationService {
 			auditDetails.setDate((String) dtf.format(now));
 			auditDetails.setTaskId(communication.getTaskId());
 			auditDetails.setAuditType("Communication Details Deleted");
-			auditDetails.setAction("Communication Details Deleted");
+			auditDetails.setAction("Entered Note: Communication Details Deleted");
 			Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			if (userDetails instanceof UserDetails) {
 				auditDetails.setUser(((UserDetails) userDetails).getUsername());

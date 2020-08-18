@@ -21,4 +21,9 @@ public class AuditController {
     public ResponseEntity<List<Audit>> saveAuditDetails(@RequestBody Audit audit) {
         return ResponseEntity.ok(auditService.saveAuditDetails(audit));
     }
+    
+    @PostMapping("/getAuditData")
+    public ResponseEntity<List<Audit>> getAuditData(@RequestBody long id) {
+        return ResponseEntity.ok(auditService.getAuditData(id));
+    }
 }
