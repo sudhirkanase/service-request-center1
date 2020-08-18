@@ -29,6 +29,11 @@ public class AuditService {
         return filteredAuditList;
     }
     
+    public List<Audit> getAuditData(long taskId) {
+    	return auditList.stream().filter(audit -> audit.getTaskId() == taskId)
+				.collect(Collectors.toList());
+    }
+    
     public List<Audit> getAuditList() {
     	return auditList;
     }

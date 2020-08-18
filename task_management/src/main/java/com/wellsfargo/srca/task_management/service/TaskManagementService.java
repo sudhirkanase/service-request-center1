@@ -163,12 +163,12 @@ public class TaskManagementService {
 		// if already exists then update the data
 		if (taskDetail == null) {
 			auditDetails.setAuditType("Task Created");
-			auditDetails.setAction("Task Created");
+			auditDetails.setAction("Entered Note: Task Created");
 			tasks.add(details);
 		} else {
 			tasks.set(tasks.indexOf(taskDetail), details);
 			auditDetails.setAuditType("Task Updated");
-			auditDetails.setAction("Task Updated");
+			auditDetails.setAction("Entered Note: Task Updated");
 		}
 		
 		//To Save Audit data

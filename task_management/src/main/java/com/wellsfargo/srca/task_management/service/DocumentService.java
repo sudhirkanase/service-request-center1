@@ -46,7 +46,7 @@ public class DocumentService {
 		auditDetails.setDate((String) dtf.format(now));
 		auditDetails.setTaskId(document.getTaskId());
 		auditDetails.setAuditType("Document Created");
-		auditDetails.setAction("Document Created");
+		auditDetails.setAction("Entered Note: Document Created");
 		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (userDetails instanceof UserDetails) {
 			auditDetails.setUser(((UserDetails) userDetails).getUsername());
@@ -78,7 +78,7 @@ public class DocumentService {
 			auditDetails.setDate((String) dtf.format(now));
 			auditDetails.setTaskId(document.getTaskId());
 			auditDetails.setAuditType("Document Deleted");
-			auditDetails.setAction("Document Deleted");
+			auditDetails.setAction("Entered Note: Document Deleted");
 			Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			if (userDetails instanceof UserDetails) {
 				auditDetails.setUser(((UserDetails) userDetails).getUsername());
