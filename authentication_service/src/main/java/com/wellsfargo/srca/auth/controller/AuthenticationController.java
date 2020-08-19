@@ -53,7 +53,7 @@ public class AuthenticationController {
 			@RequestBody UserLoginDetails user) {
 
 		authenticate(user.getUsername(), user.getPassword());
-
+		String Id=request.getSession().getId();
 //		HttpSessionCsrfTokenRepository csrfRepo = new HttpSessionCsrfTokenRepository();
 //		CsrfToken token = csrfRepo.generateToken(request);
 
@@ -69,7 +69,7 @@ public class AuthenticationController {
 
 		BeanUtils.copyProperties(userDetails, user);
 		user.setFullName(userDetails.getUsername());
-		//user.setAuthToken(token.getToken());
+		user.setAuthToken(Id);
 		user.setPassword(null);
 		return ResponseEntity.ok(user);
 	}
