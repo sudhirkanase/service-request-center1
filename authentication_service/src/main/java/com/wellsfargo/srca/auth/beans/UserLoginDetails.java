@@ -1,5 +1,9 @@
 package com.wellsfargo.srca.auth.beans;
 
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+
 public class UserLoginDetails {
 	private static final long serialVersionUID = -5616176897013108345L;
 
@@ -10,6 +14,7 @@ public class UserLoginDetails {
 	private String lastName;
 	private String fullName;
 	private String authToken;
+	private List<GrantedAuthority> roles;
 
 	public String getUsername() {
 		return username;
@@ -65,6 +70,14 @@ public class UserLoginDetails {
 
 	public void setAuthToken(String authToken) {
 		this.authToken = authToken;
+	}
+
+	public List<GrantedAuthority> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<GrantedAuthority> roles) {
+		this.roles = roles;
 	}
 
 }

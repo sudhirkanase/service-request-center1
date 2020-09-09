@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.wellsfargo.srca.task_management.beans.Audit;
 import com.wellsfargo.srca.task_management.beans.Communication;
+import com.wellsfargo.srca.task_management.beans.Document;
 import com.wellsfargo.srca.task_management.exception.DataNotFoundException;
 
 @Service
@@ -82,8 +83,11 @@ public class CommunicationService {
 			}
 			// To Save Audit data
 			auditService.saveAuditDetails(auditDetails);
+			
+			List<Communication> commListRes = communicationList.stream().filter(commObj -> commObj.getTaskId() == communication.getTaskId())
+					.collect(Collectors.toList());
 
-			return communicationList;
+			return commListRes;
 		} else {
 			throw new DataNotFoundException("Communication Details not found" + communicationId);
 		}

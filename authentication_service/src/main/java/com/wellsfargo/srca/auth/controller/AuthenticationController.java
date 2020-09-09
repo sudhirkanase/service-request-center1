@@ -1,5 +1,8 @@
 package com.wellsfargo.srca.auth.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,13 +48,13 @@ public class AuthenticationController {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@Autowired
 	LoggedInUserInfoCache userCache;
 
 	@PostMapping("authenticate")
-	public @ResponseBody ResponseEntity<UserLoginDetails> getLogin(HttpServletRequest request, HttpServletResponse response,
-			@RequestBody UserLoginDetails user) {
+	public @ResponseBody ResponseEntity<UserLoginDetails> getLogin(HttpServletRequest request,
+			HttpServletResponse response, @RequestBody UserLoginDetails user) {
 
 		authenticate(user.getUsername(), user.getPassword());
 
@@ -61,16 +65,23 @@ public class AuthenticationController {
 
 		// add in the cache
 		userCache.put(token.getToken(), (User) userDetails);
-		
+
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 				userDetails, null, userDetails.getAuthorities());
 		usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 		SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
+		List<GrantedAuthority> userRoles = new ArrayList<GrantedAuthority>();
+		Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+		for (GrantedAuthority userRole : authorities) {
+			userRoles.add(userRole);
+		}
+
 		BeanUtils.copyProperties(userDetails, user);
 		user.setFullName(userDetails.getUsername());
 		user.setAuthToken(token.getToken());
 		user.setPassword(null);
+		user.setRoles(userRoles);
 		return ResponseEntity.ok(user);
 	}
 

@@ -3,6 +3,7 @@ package com.wellsfargo.srca.task_management.service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -47,14 +48,12 @@ public class TaskManagementService {
 	List<ServiceRequestTask> tasks = null;
 
 	public List<ServiceRequestTask> getServiceReqTasks() {
-		if (tasks == null) {
-			tasks = loadTasks();
+
+		if (tasks != null) {
+			// Sort ID by descending order
+			tasks = tasks.stream().sorted(Comparator.comparing(ServiceRequestTask::getId).reversed())
+					.collect(Collectors.toList());
 		}
-
-		// Sort ID by descending order
-		tasks = tasks.stream().sorted(Comparator.comparing(ServiceRequestTask::getId).reversed())
-				.collect(Collectors.toList());
-
 		return tasks;
 	}
 
@@ -115,8 +114,12 @@ public class TaskManagementService {
 		details.setAccountDetail(accService.getAccount(acctNumber));
 
 		// To get max taskId and add +1 to it
-		ServiceRequestTask src = Collections.max(tasks, Comparator.comparing(s -> s.getId()));
-		details.setId(src.getId() + 1);
+		if (tasks != null) {
+			ServiceRequestTask src = Collections.max(tasks, Comparator.comparing(s -> s.getId()));
+			details.setId(src.getId() + 1);
+		} else {
+			details.setId(1);
+		}
 
 		// Set user details
 		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -138,9 +141,11 @@ public class TaskManagementService {
 
 	public ServiceRequestTask saveTask(ServiceRequestTask details) {
 
-		ServiceRequestTask taskDetail = tasks.stream().filter(taskList -> taskList.getId() == details.getId()).findAny()
-				.orElse(null);
+		ServiceRequestTask taskDetail = null;
 
+		if (tasks != null) {
+			taskDetail = tasks.stream().filter(taskList -> taskList.getId() == details.getId()).findAny().orElse(null);
+		}
 		details.setDueDate("20/08/20");
 		details.setTaskSpecific("Online");
 		details.setWorkflowStep("Contact Center Entity");
@@ -162,6 +167,9 @@ public class TaskManagementService {
 		}
 		// if already exists then update the data
 		if (taskDetail == null) {
+			if (tasks == null) {
+				tasks = new ArrayList<ServiceRequestTask>();
+			}
 			auditDetails.setAuditType("Task Created");
 			auditDetails.setAction("Entered Note: Task Created");
 			tasks.add(details);
@@ -170,8 +178,8 @@ public class TaskManagementService {
 			auditDetails.setAuditType("Task Updated");
 			auditDetails.setAction("Entered Note: Task Updated");
 		}
-		
-		//To Save Audit data
+
+		// To Save Audit data
 		auditService.saveAuditDetails(auditDetails);
 
 		return details;
@@ -179,8 +187,11 @@ public class TaskManagementService {
 
 	public List<ServiceRequestTask> getTaskList(Integer accountNo) {
 
-		List<ServiceRequestTask> taskList = tasks.stream().filter(task -> task.getAccountNo().equals(accountNo))
-				.collect(Collectors.toList());
+		List<ServiceRequestTask> taskList = null;
+		if (tasks != null) {
+			taskList = tasks.stream().filter(task -> task.getAccountNo().equals(accountNo))
+					.collect(Collectors.toList());
+		}
 		return taskList;
 	}
 

@@ -86,7 +86,10 @@ public class DocumentService {
 			// To Save Audit data
 			auditService.saveAuditDetails(auditDetails);
 			
-			return documentList;
+			List<Document> documentListRes = documentList.stream().filter(documentObj -> documentObj.getTaskId() == document.getTaskId())
+					.collect(Collectors.toList());
+			
+			return documentListRes;
 		} else {
 			throw new DataNotFoundException("Document not found" + documentId);
 		}
