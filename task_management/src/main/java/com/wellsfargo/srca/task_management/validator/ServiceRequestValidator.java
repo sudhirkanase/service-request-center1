@@ -8,6 +8,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,7 @@ import com.wellsfargo.srca.task_management.beans.ServiceRequestTask;
 @Qualifier("BaseServiceRequestValidator")
 public class ServiceRequestValidator implements IServiceRequestValidator<ServiceRequestTask> {
 
+	private static final Logger logger = LoggerFactory.getLogger(ServiceRequestValidator.class);
 	@Override
 	public Set<String> validate(ServiceRequestTask task) {
 		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -40,6 +43,6 @@ public class ServiceRequestValidator implements IServiceRequestValidator<Service
 
 		ServiceRequestValidator validator = new ServiceRequestValidator();
 		Set<String> errors = validator.validate(task);
-		errors.forEach(error -> System.out.println(error));
+		errors.forEach(error -> logger.error(error));
 	}
 }
