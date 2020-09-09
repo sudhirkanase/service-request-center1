@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.wellsfargo.srca.auth.config.UnAuthorizedAuthenticationEntryPoint;
 import com.wellsfargo.srca.task_management.beans.Document;
 import com.wellsfargo.srca.task_management.service.DocumentService;
 import com.wellsfargo.srca.task_management.service.TaskValidatorService;
@@ -24,6 +27,8 @@ import com.wellsfargo.srca.task_management.service.TaskValidatorService;
 @RestController
 public class DocumentController {
 
+	private static final Logger logger = LoggerFactory.getLogger(DocumentController.class);
+	
     @Autowired
     DocumentService documentService;
 
@@ -80,7 +85,7 @@ public class DocumentController {
         if (!Files.isDirectory(fileUploadFolder)) {
             Files.createDirectories(fileUploadFolder);
         }
-        System.out.println("File upload path:- " + fileUploadFolder.toString());
+        logger.debug("File upload path:- {}", fileUploadFolder.toString());
         Path uploadFilePath = Paths.get(fileUploadFolder + File.separator + fileName);
         return uploadFilePath;
     }

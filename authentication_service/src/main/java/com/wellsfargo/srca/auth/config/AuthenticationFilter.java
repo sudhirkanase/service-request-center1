@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +25,8 @@ import com.wellsfargo.srca.services.AppUserDetailsService;
 @Component
 public class AuthenticationFilter extends OncePerRequestFilter {
 
+	private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
+	
 	@Autowired
 	AppUserDetailsService userDetailService;
 
@@ -32,7 +36,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		System.out.println("Filtering request from Auth filter");
+		logger.info("Filtering request from Auth filter");
 
 		String headerCsrfToken = (String) request.getHeader("X-CSRF-TOKEN");
 
