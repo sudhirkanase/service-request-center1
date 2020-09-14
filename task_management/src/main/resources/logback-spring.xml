@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- https://springframework.guru/logback-configuration-using-xml/#:~:text=In%20a%20Spring%20Boot%20application,its%20location%20using%20the%20Logback. -->
+<configuration>
+<property name="inc" value="0"/>
+
+	<property name="LOG_PATH" value="logs"/>
+	<property name="LOG_ARCHIVE" value="${LOG_PATH}/archive"/> 
+	<property name="APPLICATION_LOG_FILENAME" value="Application-LogFile"/>
+  	<property name="APPLICATION_LOG_ROLLING_FILENAME" value="Application-RollingLogFile"/>
+  	<timestamp key="timestamp-by-second" datePattern="ddMMyyyy'T'HHmmss"/>
+	
+	<appender name="Console-Appender" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- <layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36} %M[%line]  - %msg%n</Pattern>
+		</layout> -->
+		
+		<encoder>
+      		<Pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36} %M[%line]  - %msg%n</Pattern>
+   		</encoder>
+	</appender>
+	
+	<appender name="File-Appender" class="ch.qos.logback.core.FileAppender">
+		<!-- in Single file will append the logs -->
+		<file>${LOG_PATH}/${APPLICATION_LOG_FILENAME}.log</file>
+		<!-- use the previously created timestamp to create a uniquely named log file -->
+	    <!-- <file>${LOG_PATH}/${APPLICATION_LOG_FILENAME}-${timestamp-by-second}.log</file> -->
+	    
+	    <encoder>
+	        <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36} %M[%line]  - %msg%n</pattern>
+	        <outputPatternAsHeader>true</outputPatternAsHeader>
+	    </encoder>
+	</appender>
+	
+<!-- http://logback.qos.ch/manual/appenders.html -->
+	<appender name="RollingFile-Appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		
+		<file>${LOG_PATH}/${APPLICATION_LOG_ROLLING_FILENAME}.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>${LOG_ARCHIVE}/${APPLICATION_LOG_ROLLING_FILENAME}.%d{dd-MM-yyyy}.log</fileNamePattern>
+			
+		<!-- OR -->
+		<!-- <file>${LOG_PATH}/rollingfile.txt</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> -->
+			<!-- daily rollover -->
+			<!-- <fileNamePattern>${LOG_ARCHIVE}/rollingfile_txt.%d{dd-MM-yyyy}.%i.txt</fileNamePattern> -->
+			<!-- each file should be at most 100MB or 1KB, keep 60 days worth of history, but at most 20GB -->
+       		<!-- <maxFileSize>1MB</maxFileSize> -->  
+       		
+       		
+			<!-- keep 30 days' worth of history capped at 3GB total size -->
+			<maxHistory>30</maxHistory>
+			<totalSizeCap>1MB</totalSizeCap>
+		</rollingPolicy>
+		
+		<encoder>
+			<pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36} %M[%line]  - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- Print log for spring boot starter -->
+	<root level="info">
+		<appender-ref ref="Console-Appender" />
+	</root>
+
+	<!-- Log everything at the info level FOR  com.wellsfargo.srca-->
+	<logger name="com.wellsfargo.srca" level="info" additivity="false">
+		<appender-ref ref="Console-Appender" />
+		
+		<appender-ref ref="File-Appender" />
+		
+		<appender-ref ref="RollingFile-Appender" />
+	</logger>
+	
+</configuration>
+
+<!-- %d{yyyy-MM-dd HH:mm:ss}—Date in the specified format
+	[%thread] —Current thread identifier writing the message
+	%-5level —The message level with five-character, fixed-width spacing
+	%logger{36} —The name of the logger writing the message
+	%msg%n —The actual message followed by a new line
+	%M - method name 
+	%line - looger line number -->

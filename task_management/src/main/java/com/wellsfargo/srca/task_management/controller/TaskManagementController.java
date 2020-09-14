@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.wellsfargo.srca.task_management.beans.ServiceRequestTask;
 import com.wellsfargo.srca.task_management.service.TaskManagementService;
 import com.wellsfargo.srca.task_management.service.TaskValidatorService;
@@ -21,6 +24,8 @@ import com.wellsfargo.srca.task_management.service.TaskValidatorService;
 //@RequestMapping("")
 public class TaskManagementController {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	TaskManagementService taskService;
 
@@ -32,6 +37,10 @@ public class TaskManagementController {
 
 	@GetMapping("/getServiceReqTasks")
 	public ResponseEntity<List<ServiceRequestTask>> getServiceReqTasks() {
+		 logger.debug("This is a debug message.");
+		 logger.info("This is an info message.");
+	     logger.warn("This is a warn message.");
+	     logger.error("This is an error message.");   
 		return ResponseEntity.ok(taskService.getServiceReqTasks());
 	}
 
