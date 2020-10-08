@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 
 class TestUnits {
 
-	//@Test
+	@Test
 	void test() {
-		fail("Not yet implemented");
+		assertTrue(true);
 	}
 	
 	@Test
