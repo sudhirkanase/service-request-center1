@@ -10,5 +10,11 @@ class TestUnits {
 	void test() {
 		fail("Not yet implemented");
 	}
+	
+	@Test
+	void test1() {
+		assertTrue(true);
+	}
+	
 
 }
